@@ -21,7 +21,7 @@
 	$mysql_password = $_POST['dbPass'];
 	$mysql_database = $_POST['dbName'];
 	// Name of the file
-$filename = 'hoosk.sql';
+$filename = 'newHoosk.sql';
 
 
 // Connect to MySQL server
@@ -36,22 +36,21 @@ $lines = file($filename);
 // Loop through each line
 foreach ($lines as $line)
 { 
-// Skip it if it's a comment
-if (substr($line, 0, 2) == '--' || $line == '')
+// Skip it if it's a comment - First two spaces also before --
+if (substr($line, 0, 2) == '  --' || $line == '')
     continue;
 
-// Add this line to the current segment
-$templine .= $line;
+// Keep on Appending every line till end ; is found
+	$templine .=$line;
 // If it has a semicolon at the end, it's the end of the query
-if (substr(trim($line), -1, 1) == '~')
-{
-	$templine = str_replace(";~", ";", $templine);
-    // Perform the query
-    mysqli_query($con, $templine) or die(print('Error performing query \'<strong>' . htmlspecialchars($templine) . '\': ' . mysqli_error() . '<br /><br />'));
-    // Reset temp variable to empty
-    $templine = '';
+if(substr(trim($line), -1, 1) == ';'){
+	 // Perform the query
+	 mysqli_query($con, $templine) or die(print('Error performing query \'<strong>' . htmlspecialchars($templine) . '\': ' . mysqli_error() . '<br /><br />'));
+	 // Reset temp variable to empty
+	 $templine = '';
 }
 }
+// Adding contents to config.php file
 file_put_contents($file, $contents);
 // Create connection
 $conn = new mysqli($mysql_host, $mysql_username, $mysql_password, $mysql_database);
