@@ -25,9 +25,9 @@ $filename = 'newHoosk.sql';
 
 
 // Connect to MySQL server
-$con = mysqli_connect($mysql_host, $mysql_username, $mysql_password) or die('Error connecting to MySQL server: ' . mysqli_error());
+$con = mysqli_connect($mysql_host, $mysql_username, $mysql_password) or die('Error connecting to MySQL server: ' . mysqli_error($con));
 // Select database
-mysqli_select_db($con, $mysql_database) or die('Error selecting MySQL database: ' . mysqli_error());
+mysqli_select_db($con, $mysql_database) or die('Error selecting MySQL database: ' . mysqli_error($con));
 
 // Temporary variable, used to store current query
 $templine = '';
@@ -36,8 +36,7 @@ $lines = file($filename);
 // Loop through each line
 foreach ($lines as $line)
 { 
-// Skip it if it's a comment - First two spaces also before --
-if (substr($line, 0, 2) == '  --' || $line == '')
+if (substr($line, 0, 2) == '--' || $line == '')
     continue;
 
 // Keep on Appending every line till end ; is found
@@ -45,7 +44,7 @@ if (substr($line, 0, 2) == '  --' || $line == '')
 // If it has a semicolon at the end, it's the end of the query
 if(substr(trim($line), -1, 1) == ';'){
 	 // Perform the query
-	 mysqli_query($con, $templine) or die(print('Error performing query \'<strong>' . htmlspecialchars($templine) . '\': ' . mysqli_error() . '<br /><br />'));
+	 mysqli_query($con, $templine) or die(print('Error performing query \'<strong>' . htmlspecialchars($templine) . '\': ' . mysqli_error($con) . '<br /><br />'));
 	 // Reset temp variable to empty
 	 $templine = '';
 }
