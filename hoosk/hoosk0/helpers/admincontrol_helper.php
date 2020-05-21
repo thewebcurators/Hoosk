@@ -6,10 +6,11 @@ class Admincontrol_helper
 {
     public static function is_logged_in($userName)
     {
-        if (($userName == "")):
-            $redirect = BASE_URL . '/admin/login';
-        header("Location: $redirect");
-        exit;
-        endif;
+        // if (($userName == "")):
+        //     var_dump($userName);
+        //     $redirect = BASE_URL . '/admin/login';
+        // header("Location: $redirect");
+        // exit;
+        // endif;
     }
 }

@@ -72,7 +72,9 @@ class Admin extends CI_Controller
         $username = $this->input->post('username');
         $password = md5($this->input->post('password') . SALT);
         $result   = $this->Hoosk_model->login($username, $password);
-        if ($result) {
+        // var_dump($result);
+        if ($result != false) {
+            $this->session->set_userdata($result);
             redirect(BASE_URL . '/admin', 'refresh');
         } else {
             $this->data['error'] = "1";

@@ -190,9 +190,8 @@ class Hoosk_model extends CI_Model
                     'userName'  => $rows->userName,
                     'logged_in' => true,
                 );
-
-                $this->session->set_userdata($data);
-                return true;
+                // $this->session->set_userdata($data);
+                return $data;
             }
         } else {
             return false;
