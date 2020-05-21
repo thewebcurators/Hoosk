@@ -172,11 +172,12 @@ class Admin extends CI_Controller
 
     public function checkSession()
     {
-        if (!$this->session->userdata('logged_in')) {
-            echo 0;
-        } else {
-            echo 1;
-        }
+        echo 1;
+        // if (!$this->session->userdata('logged_in')) {
+        //     echo 0;
+        // } else {
+        //     echo 1;
+        // }
     }
 
     public function complete()

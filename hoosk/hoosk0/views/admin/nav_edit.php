@@ -245,7 +245,7 @@ $(document).ready(function()
 function serializeNav(){
 
   $.ajax({
-    url: "/admin/check/session",
+    url: " <?= BASE_URL . '/'?> /admin/check/session",
   }).done(function(data) {
     sessionExist = data;
     if(sessionExist==0){

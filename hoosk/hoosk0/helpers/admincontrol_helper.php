@@ -13,4 +13,13 @@ class Admincontrol_helper
         // exit;
         // endif;
     }
+    public static function is_Role_Admin($role)
+    {
+        // if (($role != "admin")):
+        //     // var_dump($role);
+        //     $redirect = BASE_URL . '/admin';
+        // header("Location: $redirect");
+        // exit;
+        // endif;
+    }
 }
