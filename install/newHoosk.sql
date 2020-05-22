@@ -21,6 +21,34 @@ CREATE SCHEMA IF NOT EXISTS `hoosk` DEFAULT CHARACTER SET utf8mb4 ;
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `hoosk` DEFAULT CHARACTER SET utf8mb4 ;
 USE `hoosk` ;
+
+-- -----------------------------------------------------
+-- Table `hoosk`.`hoosk_subscribers`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hoosk`.`hoosk_subscribers` ;
+
+CREATE TABLE IF NOT EXISTS `hoosk`.`hoosk_subscribers` (
+  `id` INT(11) NULL AUTO_INCREMENT,
+  `emailId` VARCHAR(100) NOT NULL,
+  `name` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hoosk`.`hoosk_contactUs`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `hoosk`.`hoosk_contactUs` ;
+
+CREATE TABLE IF NOT EXISTS `hoosk`.`hoosk_contactUs` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `emailId` VARCHAR(50) NOT NULL,
+  `name` VARCHAR(50) NOT NULL,
+  `msg` VARCHAR(50) NOT NULL,
+  `phoneNo` VARCHAR(15) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
 USE `hoosk` ;
 
 -- -----------------------------------------------------
@@ -108,7 +136,7 @@ DROP TABLE IF EXISTS `hoosk`.`hoosk_page_content` ;
 
 CREATE TABLE IF NOT EXISTS `hoosk`.`hoosk_page_content` (
   `pageID` INT(11) NOT NULL,
-  `jumbotron_id` INT(11) NOT NULL,
+  `jumbotron_id` INT(11) NULL,
   `pageTitle` TEXT NOT NULL,
   `navTitle` TEXT NOT NULL,
   `pageContent` TEXT NOT NULL,
