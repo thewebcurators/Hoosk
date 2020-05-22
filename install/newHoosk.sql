@@ -9,20 +9,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema hoosk
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `hoosk` DEFAULT CHARACTER SET utf8mb4 ;
--- -----------------------------------------------------
--- Schema hoosk
--- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema hoosk
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `hoosk` DEFAULT CHARACTER SET utf8mb4 ;
-USE `hoosk` ;
-
--- -----------------------------------------------------
 -- Table `hoosk`.`hoosk_subscribers`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `hoosk`.`hoosk_subscribers` ;
@@ -116,42 +102,23 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `hoosk`.`hoosk_jumbotron`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `hoosk`.`hoosk_jumbotron` ;
-
-CREATE TABLE IF NOT EXISTS `hoosk`.`hoosk_jumbotron` (
-  `jumbotron_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `jumbotron` TEXT NOT NULL,
-  `jumbotronHTML` TEXT NOT NULL,
-  PRIMARY KEY (`jumbotron_id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
-
-
--- -----------------------------------------------------
 -- Table `hoosk`.`hoosk_page_content`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `hoosk`.`hoosk_page_content` ;
 
 CREATE TABLE IF NOT EXISTS `hoosk`.`hoosk_page_content` (
   `pageID` INT(11) NOT NULL,
-  `jumbotron_id` INT(11) NULL,
   `pageTitle` TEXT NOT NULL,
   `navTitle` TEXT NOT NULL,
   `pageContent` TEXT NOT NULL,
   `pageContentHTML` TEXT NOT NULL,
+  `jumbotron` TEXT NOT NULL,
+  `jumbotronHTML` TEXT NOT NULL,
   `pageCreated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (`pageID`),
-  INDEX `fk_hoosk_page_content_hoosk_jumbotron1_idx` (`jumbotron_id` ASC),
   CONSTRAINT `fk_hoosk_page_content_hoosk_page_attributes1`
     FOREIGN KEY (`pageID`)
     REFERENCES `hoosk`.`hoosk_page_attributes` (`pageID`)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_hoosk_page_content_hoosk_jumbotron1`
-    FOREIGN KEY (`jumbotron_id`)
-    REFERENCES `hoosk`.`hoosk_jumbotron` (`jumbotron_id`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -301,6 +268,26 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- -----------------------------------------------------
+-- Data for table `hoosk`.`hoosk_subscribers`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `hoosk`;
+INSERT INTO `hoosk`.`hoosk_subscribers` (`id`, `emailId`, `name`) VALUES (1, 'demo@example.com', 'John Smith');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `hoosk`.`hoosk_contactUs`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `hoosk`;
+INSERT INTO `hoosk`.`hoosk_contactUs` (`id`, `emailId`, `name`, `msg`, `phoneNo`) VALUES (1, 'demo@example.com', 'John Smith', 'I have some msg for you', '9891231321');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
 -- Data for table `hoosk`.`hoosk_page_attributes`
 -- -----------------------------------------------------
 START TRANSACTION;
@@ -324,24 +311,13 @@ COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `hoosk`.`hoosk_jumbotron`
--- -----------------------------------------------------
-START TRANSACTION;
-USE `hoosk`;
-INSERT INTO `hoosk`.`hoosk_jumbotron` (`jumbotron_id`, `jumbotron`, `jumbotronHTML`) VALUES (1, '{\"data\":[{\"type\":\"image_extended\",\"data\":{\"file\":{\"url\":\"http://beta.hoosk.org/images/large_logo.png\",\"filename\":\"large_logo.png\"},\"caption\":\"Hoosk Emblem\",\"source\":\"\"}},{\"type\":\"image_extended\",\"data\":{\"file\":{\"url\":\"http://beta.hoosk.org/images/welcome_to_hoosk.png\",\"filename\":\"welcome_to_hoosk.png\"},\"caption\":\"welcome to hoosk\",\"source\":\"\"}},{\"type\":\"text\",\"data\":{\"text\":\"This demo resets every half hour, the login details are:\\n\\n\"}},{\"type\":\"columns\",\"data\":{\"columns\":[{\"width\":6,\"blocks\":[{\"type\":\"text\",\"data\":{\"text\":\"Username \\\\- demo\\n\\n\"}}]},{\"width\":6,\"blocks\":[{\"type\":\"text\",\"data\":{\"text\":\"Password \\\\- demo\\n\\n\"}}]}],\"preset\":\"columns-6-6\"}},{\"type\":\"button\",\"data\":{\"size\":\"btn-lg\",\"style\":\"btn-primary\",\"is_block\":false,\"url\":\"/admin\",\"null\":\"0\",\"html\":\"Login!\"}}]}', '<img class=\"img-responsive\" src=\"http://beta.hoosk.org/images/large_logo.png\" alt=\"Hoosk Emblem\" /><img class=\"img-responsive\" src=\"http://beta.hoosk.org/images/welcome_to_hoosk.png\" alt=\"welcome to hoosk\" /><p>This demo resets every half hour, the login details are:</p><div class=\'row\'><div class=\'col-md-6\'><p>Username &#45; demo</p></div><div class=\'col-md-6\'><p>Password &#45; demo</p></div></div><a href=\"/admin\" class=\"btn btn-primary btn-lg\">Login!</a>');
-INSERT INTO `hoosk`.`hoosk_jumbotron` (`jumbotron_id`, `jumbotron`, `jumbotronHTML`) VALUES (2, '{\"data\":[{\"type\":\"image_extended\",\"data\":{\"file\":{\"url\":\"http://beta.hoosk.org/images/large_logo.png\",\"filename\":\"large_logo.png\"},\"caption\":\"Hoosk Emblem\",\"source\":\"\"}}]}', '<img class=\"img-responsive\" src=\"http://beta.hoosk.org/images/large_logo.png\" alt=\"Hoosk Emblem\" />');
-
-COMMIT;
-
-
--- -----------------------------------------------------
 -- Data for table `hoosk`.`hoosk_page_content`
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `hoosk`;
-INSERT INTO `hoosk`.`hoosk_page_content` (`pageID`, `jumbotron_id`, `pageTitle`, `navTitle`, `pageContent`, `pageContentHTML`, `pageCreated`) VALUES (1, 1, 'Hoosk Demo', 'Home', '{\"data\":[{\"type\":\"columns\",\"data\":{\"columns\":[{\"width\":6,\"blocks\":[{\"type\":\"heading\",\"data\":{\"text\":\"This is the Hoosk demo site.\\n\",\"heading\":\"\"}},{\"type\":\"text\",\"data\":{\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quam nisl, sodales id lobortis quis, dapibus quis mauris. Fusce sed placerat risus. Pellentesque imperdiet ex et libero eleifend, ac mattis tortor ultricies. Donec vel ullamcorper purus. Vestibulum dignissim ipsum quis porta finibus.\\n\\n\"}},{\"type\":\"text\",\"data\":{\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quam nisl, sodales id lobortis quis, dapibus quis mauris. Fusce sed placerat risus. Pellentesque imperdiet ex et libero eleifend, ac mattis tortkjor ultricies. Donec vel ullamcorper purus. Vestibulum dignissim ipsum quis porta finibus.\\n\\n\"}}]},{\"width\":6,\"blocks\":[{\"type\":\"image_extended\",\"data\":{\"file\":{\"url\":\"http://beta.hoosk.org/images/responsive_hoosk.png\",\"filename\":\"responsive_hoosk.png\"},\"caption\":\"Hoosk is responsive\",\"source\":\"\"}}]}],\"preset\":\"columns-6-6\"}}]}', '<div class=\'row\'><div class=\'col-md-6\'><>This is the Hoosk demo site.</><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quam nisl, sodales id lobortis quis, dapibus quis mauris. Fusce sed placerat risus. Pellentesque imperdiet ex et libero eleifend, ac mattis tortor ultricies. Donec vel ullamcorper purus. Vestibulum dignissim ipsum quis porta finibus.</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quam nisl, sodales id lobortis quis, dapibus quis mauris. Fusce sed placerat risus. Pellentesque imperdiet ex et libero eleifend, ac mattis tortkjor ultricies. Donec vel ullamcorper purus. Vestibulum dignissim ipsum quis porta finibus.</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quam nisl, sodales id lobortis quis, dapibus quis mauris. Fusce sed placerat risus. Pellentesque imperdiet ex et libero eleifend, ac mattis tortkjor ultricies. Donec vel ullamcorper purus. Vestibulum dignissim ipsum quis porta finibus.</p></div><div class=\'col-md-6\'><img class=\"img-responsive\" src=\"http://beta.hoosk.org/images/responsive_hoosk.png\" alt=\"Hoosk is responsive\" />', '2014-11-03 02:22:20');
-INSERT INTO `hoosk`.`hoosk_page_content` (`pageID`, `jumbotron_id`, `pageTitle`, `navTitle`, `pageContent`, `pageContentHTML`, `pageCreated`) VALUES (2, 2, 'Contact', 'Contact', '{\"data\":[{\"type\":\"heading\",\"data\":{\"text\":\"Contact\"}},{\"type\":\"text\",\"data\":{\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quam nisl, sodales id lobortis quis, dapibus quis mauris. Fusce sed placerat risus. Pellentesque imperdiet ex et libero eleifend, ac mattis tortor ultricies. Donec vel ullamcorper purus. Vestibulum dignissim ipsum quis porta finibus.\\n\"}}]}', '<h2>Contact</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quam nisl, sodales id lobortis quis, dapibus quis mauris. Fusce sed placerat risus. Pellentesque imperdiet ex et libero eleifend, ac mattis tortor ultricies. Donec vel ullamcorper purus. Vestibulum dignissim ipsum quis porta finibus.</p>', '2014-11-04 11:54:54');
-INSERT INTO `hoosk`.`hoosk_page_content` (`pageID`, `jumbotron_id`, `pageTitle`, `navTitle`, `pageContent`, `pageContentHTML`, `pageCreated`) VALUES (3, 1, 'News', 'News', '', '', '2014-12-03 06:47:20');
+INSERT INTO `hoosk`.`hoosk_page_content` (`pageID`, `pageTitle`, `navTitle`, `pageContent`, `pageContentHTML`, `jumbotron`, `jumbotronHTML`, `pageCreated`) VALUES (1, 'Hoosk Demo', 'Home', '{\"data\":[{\"type\":\"columns\",\"data\":{\"columns\":[{\"width\":6,\"blocks\":[{\"type\":\"heading\",\"data\":{\"text\":\"This is the Hoosk demo site.\\n\",\"heading\":\"\"}},{\"type\":\"text\",\"data\":{\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quam nisl, sodales id lobortis quis, dapibus quis mauris. Fusce sed placerat risus. Pellentesque imperdiet ex et libero eleifend, ac mattis tortor ultricies. Donec vel ullamcorper purus. Vestibulum dignissim ipsum quis porta finibus.\\n\\n\"}},{\"type\":\"text\",\"data\":{\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quam nisl, sodales id lobortis quis, dapibus quis mauris. Fusce sed placerat risus. Pellentesque imperdiet ex et libero eleifend, ac mattis tortkjor ultricies. Donec vel ullamcorper purus. Vestibulum dignissim ipsum quis porta finibus.\\n\\n\"}}]},{\"width\":6,\"blocks\":[{\"type\":\"image_extended\",\"data\":{\"file\":{\"url\":\"http://beta.hoosk.org/images/responsive_hoosk.png\",\"filename\":\"responsive_hoosk.png\"},\"caption\":\"Hoosk is responsive\",\"source\":\"\"}}]}],\"preset\":\"columns-6-6\"}}]}', '<div class=\'row\'><div class=\'col-md-6\'><>This is the Hoosk demo site.</><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quam nisl, sodales id lobortis quis, dapibus quis mauris. Fusce sed placerat risus. Pellentesque imperdiet ex et libero eleifend, ac mattis tortor ultricies. Donec vel ullamcorper purus. Vestibulum dignissim ipsum quis porta finibus.</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quam nisl, sodales id lobortis quis, dapibus quis mauris. Fusce sed placerat risus. Pellentesque imperdiet ex et libero eleifend, ac mattis tortkjor ultricies. Donec vel ullamcorper purus. Vestibulum dignissim ipsum quis porta finibus.</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quam nisl, sodales id lobortis quis, dapibus quis mauris. Fusce sed placerat risus. Pellentesque imperdiet ex et libero eleifend, ac mattis tortkjor ultricies. Donec vel ullamcorper purus. Vestibulum dignissim ipsum quis porta finibus.</p></div><div class=\'col-md-6\'><img class=\"img-responsive\" src=\"http://beta.hoosk.org/images/responsive_hoosk.png\" alt=\"Hoosk is responsive\" />', '\'{\\\"data\\\":[{\\\"type\\\":\\\"image_extended\\\",\\\"data\\\":{\\\"file\\\":{\\\"url\\\":\\\"http://beta.hoosk.org/images/large_logo.png\\\",\\\"filename\\\":\\\"large_logo.png\\\"},\\\"caption\\\":\\\"Hoosk Emblem\\\",\\\"source\\\":\\\"\\\"}},{\\\"type\\\":\\\"image_extended\\\",\\\"data\\\":{\\\"file\\\":{\\\"url\\\":\\\"http://beta.hoosk.org/images/welcome_to_hoosk.png\\\",\\\"filename\\\":\\\"welcome_to_hoosk.png\\\"},\\\"caption\\\":\\\"welcome to hoosk\\\",\\\"source\\\":\\\"\\\"}},{\\\"type\\\":\\\"text\\\",\\\"data\\\":{\\\"text\\\":\\\"This demo resets every half hour, the login details are:\\\\n\\\\n\\\"}},{\\\"type\\\":\\\"columns\\\",\\\"data\\\":{\\\"columns\\\":[{\\\"width\\\":6,\\\"blocks\\\":[{\\\"type\\\":\\\"text\\\",\\\"data\\\":{\\\"text\\\":\\\"Username \\\\\\\\- demo\\\\n\\\\n\\\"}}]},{\\\"width\\\":6,\\\"blocks\\\":[{\\\"type\\\":\\\"text\\\",\\\"data\\\":{\\\"text\\\":\\\"Password \\\\\\\\- demo\\\\n\\\\n\\\"}}]}],\\\"preset\\\":\\\"columns-6-6\\\"}},{\\\"type\\\":\\\"button\\\",\\\"data\\\":{\\\"size\\\":\\\"btn-lg\\\",\\\"style\\\":\\\"btn-primary\\\",\\\"is_block\\\":false,\\\"url\\\":\\\"/admin\\\",\\\"null\\\":\\\"0\\\",\\\"html\\\":\\\"Login!\\\"}}]}\'', '\'<img class=\\\"img-responsive\\\" src=\\\"http://beta.hoosk.org/images/large_logo.png\\\" alt=\\\"Hoosk Emblem\\\" /><img class=\\\"img-responsive\\\" src=\\\"http://beta.hoosk.org/images/welcome_to_hoosk.png\\\" alt=\\\"welcome to hoosk\\\" /><p>This demo resets every half hour, the login details are:</p><div class=\\\'row\\\'><div class=\\\'col-md-6\\\'><p>Username &#45; demo</p></div><div class=\\\'col-md-6\\\'><p>Password &#45; demo</p></div></div><a href=\\\"/admin\\\" class=\\\"btn btn-primary btn-lg\\\">Login!</a>\'', '2014-11-03 02:22:20');
+INSERT INTO `hoosk`.`hoosk_page_content` (`pageID`, `pageTitle`, `navTitle`, `pageContent`, `pageContentHTML`, `jumbotron`, `jumbotronHTML`, `pageCreated`) VALUES (2, 'Contact', 'Contact', '{\"data\":[{\"type\":\"heading\",\"data\":{\"text\":\"Contact\"}},{\"type\":\"text\",\"data\":{\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quam nisl, sodales id lobortis quis, dapibus quis mauris. Fusce sed placerat risus. Pellentesque imperdiet ex et libero eleifend, ac mattis tortor ultricies. Donec vel ullamcorper purus. Vestibulum dignissim ipsum quis porta finibus.\\n\"}}]}', '<h2>Contact</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quam nisl, sodales id lobortis quis, dapibus quis mauris. Fusce sed placerat risus. Pellentesque imperdiet ex et libero eleifend, ac mattis tortor ultricies. Donec vel ullamcorper purus. Vestibulum dignissim ipsum quis porta finibus.</p>', '\'{\\\"data\\\":[{\\\"type\\\":\\\"image_extended\\\",\\\"data\\\":{\\\"file\\\":{\\\"url\\\":\\\"http://beta.hoosk.org/images/large_logo.png\\\",\\\"filename\\\":\\\"large_logo.png\\\"},\\\"caption\\\":\\\"Hoosk Emblem\\\",\\\"source\\\":\\\"\\\"}}]}\'', '\'<img class=\\\"img-responsive\\\" src=\\\"http://beta.hoosk.org/images/large_logo.png\\\" alt=\\\"Hoosk Emblem\\\" />\'', '2014-11-04 11:54:54');
+INSERT INTO `hoosk`.`hoosk_page_content` (`pageID`, `pageTitle`, `navTitle`, `pageContent`, `pageContentHTML`, `jumbotron`, `jumbotronHTML`, `pageCreated`) VALUES (3, 'News', 'News', '', '', '\'{\\\"data\\\":[{\\\"type\\\":\\\"image_extended\\\",\\\"data\\\":{\\\"file\\\":{\\\"url\\\":\\\"http://beta.hoosk.org/images/large_logo.png\\\",\\\"filename\\\":\\\"large_logo.png\\\"},\\\"caption\\\":\\\"Hoosk Emblem\\\",\\\"source\\\":\\\"\\\"}},{\\\"type\\\":\\\"image_extended\\\",\\\"data\\\":{\\\"file\\\":{\\\"url\\\":\\\"http://beta.hoosk.org/images/welcome_to_hoosk.png\\\",\\\"filename\\\":\\\"welcome_to_hoosk.png\\\"},\\\"caption\\\":\\\"welcome to hoosk\\\",\\\"source\\\":\\\"\\\"}},{\\\"type\\\":\\\"text\\\",\\\"data\\\":{\\\"text\\\":\\\"This demo resets every half hour, the login details are:\\\\n\\\\n\\\"}},{\\\"type\\\":\\\"columns\\\",\\\"data\\\":{\\\"columns\\\":[{\\\"width\\\":6,\\\"blocks\\\":[{\\\"type\\\":\\\"text\\\",\\\"data\\\":{\\\"text\\\":\\\"Username \\\\\\\\- demo\\\\n\\\\n\\\"}}]},{\\\"width\\\":6,\\\"blocks\\\":[{\\\"type\\\":\\\"text\\\",\\\"data\\\":{\\\"text\\\":\\\"Password \\\\\\\\- demo\\\\n\\\\n\\\"}}]}],\\\"preset\\\":\\\"columns-6-6\\\"}},{\\\"type\\\":\\\"button\\\",\\\"data\\\":{\\\"size\\\":\\\"btn-lg\\\",\\\"style\\\":\\\"btn-primary\\\",\\\"is_block\\\":false,\\\"url\\\":\\\"/admin\\\",\\\"null\\\":\\\"0\\\",\\\"html\\\":\\\"Login!\\\"}}]}\'', '\'<img class=\\\"img-responsive\\\" src=\\\"http://beta.hoosk.org/images/large_logo.png\\\" alt=\\\"Hoosk Emblem\\\" /><img class=\\\"img-responsive\\\" src=\\\"http://beta.hoosk.org/images/welcome_to_hoosk.png\\\" alt=\\\"welcome to hoosk\\\" /><p>This demo resets every half hour, the login details are:</p><div class=\\\'row\\\'><div class=\\\'col-md-6\\\'><p>Username &#45; demo</p></div><div class=\\\'col-md-6\\\'><p>Password &#45; demo</p></div></div><a href=\\\"/admin\\\" class=\\\"btn btn-primary btn-lg\\\">Login!</a>\'', '2014-12-03 06:47:20');
 
 COMMIT;
 
