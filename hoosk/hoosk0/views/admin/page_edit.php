@@ -221,7 +221,7 @@
 
 function formSubmit(){
   $.ajax({
-    url: "/admin/check/session",
+    url: "<?php echo BASE_URL; ?>/admin/check/session",
   }).done(function(data) {
     sessionExist = data;
     if(sessionExist==0){

@@ -23,35 +23,38 @@ class Users extends CI_Controller
     public function index()
     {
         Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
-        $this->load->library('pagination');
-        $result_per_page      = 15; // the number of result per page
-        $config['base_url']   = BASE_URL . '/admin/users/';
-        $config['total_rows'] = $this->Hoosk_model->countUsers();
-        $config['per_page']   = $result_per_page;
+        Admincontrol_helper::is_Role_Admin($this->session->userdata('role'));
+            $this->load->library('pagination');
+            $result_per_page      = 15; // the number of result per page
+            $config['base_url']   = BASE_URL . '/admin/users/';
+            $config['total_rows'] = $this->Hoosk_model->countUsers();
+            $config['per_page']   = $result_per_page;
 
-        $this->pagination->initialize($config);
+            $this->pagination->initialize($config);
 
-        //Get users from database
-        $this->data['users'] = $this->Hoosk_model->getUsers($result_per_page, $this->uri->segment(3));
+            //Get users from database
+            $this->data['users'] = $this->Hoosk_model->getUsers($result_per_page, $this->uri->segment(3));
 
-        //Load the view
-        $this->data['header'] = $this->load->view('admin/header', $this->data, true);
-        $this->data['footer'] = $this->load->view('admin/footer', '', true);
-        $this->load->view('admin/users', $this->data);
+            //Load the view
+            $this->data['header'] = $this->load->view('admin/header', $this->data, true);
+            $this->data['footer'] = $this->load->view('admin/footer', '', true);
+            $this->load->view('admin/users', $this->data);
     }
 
     public function addUser()
     {
         Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
-        //Load the view
-        $this->data['header'] = $this->load->view('admin/header', $this->data, true);
-        $this->data['footer'] = $this->load->view('admin/footer', '', true);
-        $this->load->view('admin/user_new', $this->data);
+        Admincontrol_helper::is_Role_Admin($this->session->userdata('role'));
+            //Load the view
+            $this->data['header'] = $this->load->view('admin/header', $this->data, true);
+            $this->data['footer'] = $this->load->view('admin/footer', '', true);
+            $this->load->view('admin/user_new', $this->data);
     }
 
     public function confirm()
     {
         Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
+        Admincontrol_helper::is_Role_Admin($this->session->userdata('role'));
         //Load the form validation library
         $this->load->library('form_validation');
         //Set validation rules
@@ -75,6 +78,7 @@ class Users extends CI_Controller
     public function editUser()
     {
         Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
+        Admincontrol_helper::is_Role_Admin($this->session->userdata('role'));
         //Get user details from database
         $this->data['users'] = $this->Hoosk_model->getUser($this->uri->segment(4));
         //Load the view
@@ -86,6 +90,7 @@ class Users extends CI_Controller
     public function edited()
     {
         Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
+        Admincontrol_helper::is_Role_Admin($this->session->userdata('role'));
         //Load the form validation library
         $this->load->library('form_validation');
         //Set validation rules
@@ -108,6 +113,7 @@ class Users extends CI_Controller
     public function delete()
     {
         Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
+        Admincontrol_helper::is_Role_Admin($this->session->userdata('role'));
         if ($this->input->post('deleteid')):
             $this->Hoosk_model->removeUser($this->input->post('deleteid'));
         redirect(BASE_URL . '/admin/users'); else:
